@@ -9,9 +9,7 @@ class PomodoroClock extends React.Component {
       <PageWrapper>
         <ContentWrapper>
           <Header />
-          <ClockWrapper>
-            <Clock />
-          </ClockWrapper>
+          <Clock />
         </ContentWrapper>
       </PageWrapper>
     );
