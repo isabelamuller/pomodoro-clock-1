@@ -11,9 +11,7 @@ class Clock extends React.Component {
   render() {
     return (
       <ClockContainer>
-        <ResetContainer>
-          <Button types="resetButton" name="Reset" />
-        </ResetContainer>
+        <Button types="resetButton" name="Reset" />
         <Counter />
         <ButtonContainer>
           <Button

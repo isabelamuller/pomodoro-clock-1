@@ -5,8 +5,9 @@ export const ClockContainer = styled.div`
   display: grid;
   justify-content: center;
   border-radius: 5px;
-  width: 30rem;
-  padding: 0rem 1rem 2rem 1rem;
+  margin: 1rem auto;
+  max-width: 30rem;
+  padding: 0.5rem 1rem 2rem 1rem;
 `;
 
 export const ButtonContainer = styled.div`
