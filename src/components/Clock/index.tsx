@@ -1,5 +1,5 @@
 import React from "react";
-import { ClockContainer, ButtonContainer, ResetContainer } from "./styles";
+import { ClockContainer, ButtonContainer } from "./styles";
 import Counter from "../Counter";
 import Button from "../Button";
 
@@ -11,9 +11,7 @@ class Clock extends React.Component {
   render() {
     return (
       <ClockContainer>
-        <ResetContainer>
           <Button types="resetButton" name="Reset" />
-        </ResetContainer>
         <Counter />
         <ButtonContainer>
           <Button
