@@ -7,3 +7,8 @@ export const CounterStyle = styled.h1`
   justify-content: center;
   margin-top: 2.5rem;
 `;
+export const ButtonContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-top: -4rem;
+`;

@@ -1,25 +1,85 @@
 import React from "react";
-import { CounterStyle } from "./styles";
+import Button from "../Button";
+import { CounterStyle, ButtonContainer } from "./styles";
 
 class Counter extends React.Component {
   state = {
-    minutes: 25,
-    seconds: 0,
+    minutes: 0,
+    seconds: 5,
+    isBreakOver: true,
   };
+  // usei esses valores (5 segundos) so pra enxergar mais rapido a mudança. task eh 5 segundos e pausa eh 4 segundos
 
+  Countdown = () => {
+    const counterLogic = () => {
+      if (this.state.seconds === 0 && this.state.minutes === 0) {
+        clearInterval(interval);
+        this.setState({
+          minutes: 0,
+          seconds: this.state.isBreakOver ? 4 : 5,
+          isBreakOver: !this.state.isBreakOver,
+        });
+        return 
+      }
+      if (this.state.seconds === 0 && this.state.minutes > 0) {
+        this.setState({
+          minutes: this.state.minutes - 1,
+          seconds: 59,
+        });
+      } else {
+        this.setState({
+          minutesTask: this.state.minutes,
+          seconds: this.state.seconds - 1,
+        });
+      }
+    };
+    const interval = setInterval(counterLogic, 1000);
+  };
+  
   render() {
-    const { minutes, seconds } = this.state;
-
+    const { minutes, seconds, isBreakOver } = this.state;
+    
+    function RenderingCounter() {
+      return (
+        <>
+          {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+        </>
+      );
+    }
+    
     return (
       <>
+        <Button
+          types="resetButton"
+          name="Reset"
+          // handleClick={() => this.ResetCounter()}
+          />
         <CounterStyle>
-          {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+          <RenderingCounter />
         </CounterStyle>
+        <ButtonContainer>
+          {isBreakOver ? (
+            <Button
+            types="default"
+            name="Start"
+            handleClick={() => this.Countdown()}
+            />
+            ) : (
+              <Button
+              types="default"
+              name="Start break"
+              handleClick={() => this.Countdown()}
+              />
+              )}
+          <Button
+            types="default"
+            name="Pause"
+            // handleClick={() => this.PauseButton}
+            />
+        </ButtonContainer>
       </>
     );
   }
 }
 
 export default Counter;
-
-// isso vou fazer depois, so deixei "meio" pronto
