@@ -12,34 +12,25 @@ class Counter extends React.Component {
 
   Countdown = () => {
     const counterLogic = () => {
-      if (!(this.state.minutes === 0 && this.state.seconds === 0)) {
-        if (this.state.seconds === 0) {
-          this.setState({
-            minutes: this.state.minutes - 1,
-            seconds: 59,
-          });
-        } else {
-          this.setState({
-            minutesTask: this.state.minutes,
-            seconds: this.state.seconds - 1,
-          });
-        }
-      }
-      if (this.state.minutes === 0 && this.state.seconds === 0) {
+      if (this.state.seconds === 0 && this.state.minutes === 0) {
         clearInterval(interval);
-        if (this.state.isBreakOver) {
-          this.setState({
-            minutes: 0,
-            seconds: 4,
-            isBreakOver: false,
-          });
-        } else {
-          this.setState({
-            minutes: 0,
-            seconds: 5,
-            isBreakOver: true,
-          });
-        }
+        this.setState({
+          minutes: 0,
+          seconds: this.state.isBreakOver ? 4 : 5,
+          isBreakOver: !this.state.isBreakOver,
+        });
+        return 
+      }
+      if (this.state.seconds === 0 && this.state.minutes > 0) {
+        this.setState({
+          minutes: this.state.minutes - 1,
+          seconds: 59,
+        });
+      } else {
+        this.setState({
+          minutesTask: this.state.minutes,
+          seconds: this.state.seconds - 1,
+        });
       }
     };
     const interval = setInterval(counterLogic, 1000);
