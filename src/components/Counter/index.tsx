@@ -4,107 +4,87 @@ import { CounterStyle, ButtonContainer } from "./styles";
 
 class Counter extends React.Component {
   state = {
-    minutesTask: 0,
-    secondsTask: 3,
-    minutesBreak: 0,
-    secondsBreak: 3,
+    minutes: 0,
+    seconds: 5,
+    isBreakOver: true,
   };
-  // usei esses valores (3 segundos) so pra enxergar mais rapido a mudança
+  // usei esses valores (5 segundos) so pra enxergar mais rapido a mudança. task eh 5 segundos e pausa eh 4 segundos
 
-  CountdownTask = () => {
-    while (!(this.state.minutesTask === 0 && this.state.secondsTask === 0)) {
-      if (this.state.secondsTask === 0) {
-        this.setState({
-          minutesTask: this.state.minutesTask - 1,
-          secondsTask: 59,
-        });
-      } else {
-        this.setState({
-          minutesTask: this.state.minutesTask,
-          secondsTask: this.state.secondsTask - 1,
-        });
+  Countdown = () => {
+    const counterLogic = () => {
+      if (!(this.state.minutes === 0 && this.state.seconds === 0)) {
+        if (this.state.seconds === 0) {
+          this.setState({
+            minutes: this.state.minutes - 1,
+            seconds: 59,
+          });
+        } else {
+          this.setState({
+            minutesTask: this.state.minutes,
+            seconds: this.state.seconds - 1,
+          });
+        }
       }
-      break;
-    }
-  };
-
-  IntervalTask = () => {
-    setInterval(this.CountdownTask, 1000);
-  };
-
-  CountdownBreak = () => {
-    while (!(this.state.minutesBreak === 0 && this.state.secondsBreak === 0)) {
-      if (this.state.secondsBreak === 0) {
-        this.setState({
-          minutesBreak: this.state.minutesBreak - 1,
-          secondsBreak: 59,
-        });
-      } else {
-        this.setState({
-          minutesBreak: this.state.minutesBreak,
-          secondsBreak: this.state.secondsBreak - 1,
-        });
+      if (this.state.minutes === 0 && this.state.seconds === 0) {
+        clearInterval(interval);
+        if (this.state.isBreakOver) {
+          this.setState({
+            minutes: 0,
+            seconds: 4,
+            isBreakOver: false,
+          });
+        } else {
+          this.setState({
+            minutes: 0,
+            seconds: 5,
+            isBreakOver: true,
+          });
+        }
       }
-      break;
-    }
+    };
+    const interval = setInterval(counterLogic, 1000);
   };
-
-  IntervalBreak = () => {
-    setInterval(this.CountdownBreak, 1000);
-  };
-
+  
   render() {
-    const { minutesTask, secondsTask, minutesBreak, secondsBreak } = this.state;
-
-    function RenderingBreak() {
+    const { minutes, seconds, isBreakOver } = this.state;
+    
+    function RenderingCounter() {
       return (
         <>
-          {minutesBreak}:{secondsBreak < 10 ? `0${secondsBreak}` : secondsBreak}
+          {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
         </>
       );
     }
-
-    function RenderingTask() {
-      return (
-        <>
-          {minutesTask}:{secondsTask < 10 ? `0${secondsTask}` : secondsTask}
-        </>
-      );
-    }
-
+    
     return (
       <>
         <Button
           types="resetButton"
           name="Reset"
           // handleClick={() => this.ResetCounter()}
-        />
+          />
         <CounterStyle>
-          {minutesTask === 0 && secondsTask === 0 ? (
-            <RenderingBreak />
-          ) : (
-            <RenderingTask />
-          )}
+          <RenderingCounter />
         </CounterStyle>
         <ButtonContainer>
-          {minutesTask === 0 && secondsTask === 0 ? (
+          {isBreakOver ? (
             <Button
-              types="default"
-              name="Start pause"
-              handleClick={() => this.IntervalBreak()}
+            types="default"
+            name="Start"
+            handleClick={() => this.Countdown()}
             />
-          ) : (
-            <Button
+            ) : (
+              <Button
               types="default"
-              name="Start task"
-              handleClick={() => this.IntervalTask()}
-            />
-          )}
+              name="Start break"
+              handleClick={() => this.Countdown()}
+              />
+              )}
           <Button
             types="default"
             name="Pause"
             // handleClick={() => this.PauseButton}
-          />
+            />
         </ButtonContainer>
       </>
     );
