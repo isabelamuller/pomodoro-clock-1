@@ -4,6 +4,9 @@ import { CounterStyle, ButtonContainer } from "./styles";
 
 class Counter extends React.Component {
   interval: NodeJS.Timeout | null = null;
+  audioRef: React.RefObject<HTMLAudioElement> = React.createRef();
+
+  url = require("../../Assets/bell.wav");
 
   state = {
     minutes: 0,
@@ -21,6 +24,9 @@ class Counter extends React.Component {
           isBreak: !this.state.isBreak,
           seconds: 0,
         });
+        if (this.audioRef.current) {
+          this.audioRef.current.play();
+        }
         return;
       }
       if (this.state.seconds === 0 && this.state.minutes > 0) {
@@ -75,6 +81,7 @@ class Counter extends React.Component {
         />
         <CounterStyle>
           <RenderingCounter />
+          <audio ref={this.audioRef} src={this.url} />
         </CounterStyle>
         <ButtonContainer>
           {isBreak ? (
