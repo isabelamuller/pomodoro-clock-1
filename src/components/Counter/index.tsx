@@ -3,23 +3,28 @@ import Button from "../Button";
 import { CounterStyle, ButtonContainer } from "./styles";
 
 class Counter extends React.Component {
+  interval: NodeJS.Timeout | null = null;
+  audioRef: React.RefObject<HTMLAudioElement> = React.createRef();
+
+  url = require("../../Assets/bell.wav");
+
   state = {
-    minutes: 0,
-    seconds: 5,
-    isBreakOver: true,
+    minutes: 25,
+    seconds: 0,
+    isBreak: true,
   };
-  // usei esses valores (5 segundos) so pra enxergar mais rapido a mudança. task eh 5 segundos e pausa eh 4 segundos
 
   Countdown = () => {
-    const counterLogic = () => {
+    this.interval = setInterval(() => {
       if (this.state.seconds === 0 && this.state.minutes === 0) {
-        clearInterval(interval);
+        this.clearInterval();
         this.setState({
-          minutes: 0,
-          seconds: this.state.isBreakOver ? 4 : 5,
-          isBreakOver: !this.state.isBreakOver,
+          minutes: this.state.isBreak ? 5 : 25,
+          isBreak: !this.state.isBreak,
+          seconds: 0,
         });
-        return 
+        this.audioRef?.current?.play()
+        return;
       }
       if (this.state.seconds === 0 && this.state.minutes > 0) {
         this.setState({
@@ -32,13 +37,30 @@ class Counter extends React.Component {
           seconds: this.state.seconds - 1,
         });
       }
-    };
-    const interval = setInterval(counterLogic, 1000);
+    }, 1000);
   };
-  
+
+  ResetCounter = () => {
+    this.setState({
+      minutes: this.state.isBreak ? 25 : 5,
+      seconds: 0,
+    });
+    this.clearInterval();
+  };
+
+  PauseCounter = () => {
+    this.clearInterval();
+  };
+
+  clearInterval = () => {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  };
+
   render() {
-    const { minutes, seconds, isBreakOver } = this.state;
-    
+    const { minutes, seconds, isBreak } = this.state;
+
     function RenderingCounter() {
       return (
         <>
@@ -46,36 +68,37 @@ class Counter extends React.Component {
         </>
       );
     }
-    
+
     return (
       <>
         <Button
           types="resetButton"
           name="Reset"
-          // handleClick={() => this.ResetCounter()}
-          />
+          handleClick={() => this.ResetCounter()}
+        />
         <CounterStyle>
           <RenderingCounter />
+          <audio ref={this.audioRef} src={this.url} />
         </CounterStyle>
         <ButtonContainer>
-          {isBreakOver ? (
+          {isBreak ? (
             <Button
-            types="default"
-            name="Start"
-            handleClick={() => this.Countdown()}
+              types="default"
+              name="Start"
+              handleClick={() => this.Countdown()}
             />
-            ) : (
-              <Button
+          ) : (
+            <Button
               types="default"
               name="Start break"
               handleClick={() => this.Countdown()}
-              />
-              )}
+            />
+          )}
           <Button
             types="default"
             name="Pause"
-            // handleClick={() => this.PauseButton}
-            />
+            handleClick={() => this.PauseCounter()}
+          />
         </ButtonContainer>
       </>
     );
