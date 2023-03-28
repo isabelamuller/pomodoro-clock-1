@@ -9,11 +9,10 @@ class Counter extends React.Component {
   url = require("../../Assets/bell.wav");
 
   state = {
-    minutes: 0,
-    seconds: 5,
+    minutes: 25,
+    seconds: 0,
     isBreak: true,
   };
-  // usei esses valores (5 segundos) so pra enxergar mais rapido a mudança.
 
   Countdown = () => {
     this.interval = setInterval(() => {
@@ -24,9 +23,7 @@ class Counter extends React.Component {
           isBreak: !this.state.isBreak,
           seconds: 0,
         });
-        if (this.audioRef.current) {
-          this.audioRef.current.play();
-        }
+        this.audioRef?.current?.play()
         return;
       }
       if (this.state.seconds === 0 && this.state.minutes > 0) {
